@@ -27,6 +27,9 @@ public:
 
     // Note: Save() may throw on allocation failure; all other operations are noexcept.
     [[nodiscard]] ServiceResult CreateOrder(const CreateOrderRequest& req);
+    [[nodiscard]] ServiceResult ConfirmOrder(int order_id);
+    [[nodiscard]] ServiceResult RejectOrder(int order_id);
+    [[nodiscard]] ServiceResult CancelOrder(int order_id);
 
 private:
     repositories::IOrderRepository&  order_repo_;
@@ -73,6 +76,46 @@ inline ServiceResult OrderService::CreateOrder(const CreateOrderRequest& req) {
     // 6. 저장 후 id 반환
     int saved_id = order_repo_.Save(order);
     return ServiceResult{true, "", saved_id};
+}
+
+inline ServiceResult OrderService::ConfirmOrder(int order_id) {
+    auto order = order_repo_.FindById(order_id);
+    if (!order.has_value()) {
+        return ServiceResult{false, "주문을 찾을 수 없습니다"};
+    }
+    if (order->status != models::OrderStatus::RESERVED) {
+        return ServiceResult{false, "확정할 수 없는 상태입니다"};
+    }
+    order->status = models::OrderStatus::CONFIRMED;
+    (void)order_repo_.Update(*order);
+    return ServiceResult{true, "", order_id};
+}
+
+inline ServiceResult OrderService::RejectOrder(int order_id) {
+    auto order = order_repo_.FindById(order_id);
+    if (!order.has_value()) {
+        return ServiceResult{false, "주문을 찾을 수 없습니다"};
+    }
+    if (order->status != models::OrderStatus::RESERVED &&
+        order->status != models::OrderStatus::CONFIRMED) {
+        return ServiceResult{false, "반려할 수 없는 상태입니다"};
+    }
+    order->status = models::OrderStatus::REJECTED;
+    (void)order_repo_.Update(*order);
+    return ServiceResult{true, "", order_id};
+}
+
+inline ServiceResult OrderService::CancelOrder(int order_id) {
+    auto order = order_repo_.FindById(order_id);
+    if (!order.has_value()) {
+        return ServiceResult{false, "주문을 찾을 수 없습니다"};
+    }
+    if (order->status == models::OrderStatus::REJECTED) {
+        return ServiceResult{false, "이미 취소된 주문입니다"};
+    }
+    order->status = models::OrderStatus::REJECTED;
+    (void)order_repo_.Update(*order);
+    return ServiceResult{true, "", order_id};
 }
 
 }  // namespace services

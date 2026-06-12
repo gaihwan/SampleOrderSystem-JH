@@ -142,6 +142,7 @@
     <ClCompile Include="tests\InMemoryProductRepositoryTest.cpp" />
     <ClCompile Include="tests\OrderValidatorTest.cpp" />
     <ClCompile Include="tests\OrderServiceCreateTest.cpp" />
+    <ClCompile Include="tests\OrderServiceTransitionTest.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\models\Order.h" />
