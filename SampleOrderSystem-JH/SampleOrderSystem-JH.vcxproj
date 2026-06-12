@@ -149,6 +149,12 @@
     <ClCompile Include="tests\OrderViewTest.cpp" />
     <ClCompile Include="tests\ProductionViewTest.cpp" />
     <ClCompile Include="tests\IntegrationTest.cpp" />
+    <ClCompile Include="tests\DummyDataGeneratorTest.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="tests\AppIntegrationTest.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="src\views\OrderView.cpp" />
     <ClCompile Include="src\views\ProductionView.cpp" />
   </ItemGroup>
@@ -167,6 +173,8 @@
     <ClInclude Include="include\controllers\OrderController.h" />
     <ClInclude Include="include\views\OrderView.h" />
     <ClInclude Include="include\views\ProductionView.h" />
+    <ClInclude Include="include\utils\DummyDataGenerator.h" />
+    <ClInclude Include="include\app\AppSession.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
