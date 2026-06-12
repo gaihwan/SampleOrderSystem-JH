@@ -95,6 +95,8 @@ inline ServiceResult OrderService::ConfirmOrder(int order_id) noexcept {
     ServiceResult err;
     auto order = FindOrder(order_id, err);
     if (!order) return err;
+    if (order_repo_.FindByStatus(models::OrderStatus::CONFIRMED).size() >= 2)
+        return ServiceResult{false, "확정 대기 중인 주문이 너무 많습니다"};
     if (order->status != models::OrderStatus::RESERVED)
         return ServiceResult{false, "확정할 수 없는 상태입니다"};
     order->status = models::OrderStatus::CONFIRMED;
