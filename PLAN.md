@@ -1,8 +1,8 @@
 # PLAN.md — SampleOrderSystem TDD 개발 계획
 
 > 최종 수정: 2026-06-12  
-> 개발 방법론: TDD (RED → GREEN → REFACTOR)  
-> 빌드: CMake + Visual Studio 2022 / 테스트: GoogleTest
+> 개발 방법론: TDD (PLAN → RED → GREEN → REVIEW → REFACTOR)  
+> 빌드: Visual Studio 2022 / 테스트: GoogleTest
 
 ---
 
@@ -14,7 +14,10 @@
   ```
   Utils → Domain Model → Repository → Service → Controller → View
   ```
-- **커밋 단위**: 각 Feature Slice의 REFACTOR 완료 후 커밋한다
+- **커밋 단위**: 각 Feature Slice는 아래 3회 커밋을 원칙으로 한다
+  1. `RED_PLAN_FS-xx.md` 작성 완료 시 (계획 커밋)
+  2. GREEN 완료 직후 (구현 커밋 — 리뷰 전)
+  3. REFACTOR 완료 후 (최종 커밋 — 리뷰 반영)
 
 ---
 
@@ -351,49 +354,57 @@ gtest_discover_tests(SampleOrderSystem_Tests)
 
 ## 6. 진행 상태 추적
 
-| Slice | RED | GREEN | REVIEW | REFACTOR | 커밋 |
-|-------|:---:|:-----:|:------:|:--------:|:----:|
-| FS-01 BatchCalculator | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |
-| FS-02 OrderValidator | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |
-| FS-03 Domain Model | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |
-| FS-04 InMemoryOrderRepo | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |
-| FS-05 InMemoryProductRepo | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |
-| FS-06 OrderService 생성 | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |
-| FS-07 OrderService 전이 | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |
-| FS-08 ProductionService | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |
-| FS-09 FileOrderRepository | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |
-| FS-10 OrderController | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |
-| FS-11 OrderView | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |
-| FS-12 통합 테스트 | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |
+| Slice | PLAN | RED | GREEN | 커밋① | REVIEW | REFACTOR | 커밋② |
+|-------|:----:|:---:|:-----:|:-----:|:------:|:--------:|:-----:|
+| FS-01 BatchCalculator | ─ | ✅ | ✅ | ─ | ✅ | ✅ | ✅ |
+| FS-02 OrderValidator | ─ | ✅ | ✅ | ─ | ✅ | ✅ | ✅ |
+| FS-03 Domain Model | ─ | ✅ | ✅ | ─ | ✅ | ✅ | ✅ |
+| FS-04 InMemoryOrderRepo | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |
+| FS-05 InMemoryProductRepo | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |
+| FS-06 OrderService 생성 | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |
+| FS-07 OrderService 전이 | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |
+| FS-08 ProductionService | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |
+| FS-09 FileOrderRepository | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |
+| FS-10 OrderController | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |
+| FS-11 OrderView | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |
+| FS-12 통합 테스트 | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |
 
-> ⬜ 미시작 / 🔴 진행중(RED) / 🟢 진행중(GREEN) / 🔵 리뷰중 / ✅ 완료
+> ⬜ 미시작 / ✅ 완료 / ─ 해당 없음(소급 적용 전 완료 Slice)  
+> 커밋① = GREEN 완료 직후 커밋 / 커밋② = REFACTOR 완료 후 커밋
 
 ---
 
 ## 7. 품질 게이트 체크리스트 (Slice 완료 기준)
 
 ```
+PLAN 완료 (RED 전 — RED_PLAN_FS-xx.md 작성 + 커밋)
+  [ ] RED_PLAN_FS-xx.md 파일이 doc/plans/ 에 생성됨
+  [ ] PLAN.md Feature Slice 목록과 연계됨
+  [ ] 테스트 케이스 목록, 설계 결정, 의존성 명시
+  [ ] docs 커밋 완료
+
 RED 완료
   [ ] 테스트가 컴파일 오류 없이 실행됨
   [ ] 테스트가 실패함 (구현 부재가 원인)
   [ ] 테스트 이름이 SuiteName_BehaviorDescription 패턴 준수
   [ ] 하나의 테스트가 하나의 동작만 검증
 
-GREEN 완료
+GREEN 완료 + 커밋① (리뷰 전)
   [ ] 새 테스트 전부 통과
   [ ] 기존 테스트 전부 통과
   [ ] YAGNI — 테스트 이상의 구현 없음
+  [ ] feat 커밋 완료 (GREEN 상태 스냅샷)
 
 REVIEW 완료 (사용자 승인 필수)
   [ ] 코드 리뷰 수행
   [ ] 리뷰 결과 보고
   [ ] 사용자 명시적 승인
 
-REFACTOR / 커밋 완료
-  [ ] cmake --build 성공
-  [ ] ctest --output-on-failure 전체 그린
-  [ ] 컴파일러 경고 없음
-  [ ] 커밋 메시지 doc/COMMIT_CONVENTION.md 준수
+REFACTOR 완료 + 커밋② (최종)
+  [ ] 리뷰 필수/권장 수정 반영
+  [ ] 빌드 성공 (경고 없음)
+  [ ] 전체 테스트 그린
+  [ ] refactor/feat 커밋 완료 (doc/COMMIT_CONVENTION.md 준수)
 ```
 
 ---
