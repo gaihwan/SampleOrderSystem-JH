@@ -37,6 +37,7 @@
 | FS-10 | OrderController | Controller | 콘솔 입력 파싱, 메뉴 흐름 | FS-07, FS-08 |
 | FS-11 | OrderView / ProductionView | View | 주문 목록 출력 형식, 상태 표시 | FS-03 |
 | FS-12 | 통합 테스트 | Integration | 전체 라이프사이클 시나리오 | 모두 |
+| FS-13 | Release 빌드 + CLI 앱 + DummyDataGenerator | Build/Utils/App | Release 빌드 수정, CLI 앱 진입점, 더미 데이터 | FS-01~FS-12 |
 
 ---
 
@@ -278,6 +279,49 @@ IntegrationTest_ConfirmOrder_BlockedWhenTwoAlreadyConfirmed
 
 ---
 
+### Phase 7 — Release 빌드 수정 + CLI 앱 + DummyDataGenerator
+
+---
+
+#### FS-13: Release 빌드 + CLI 앱 + DummyDataGenerator
+
+**배경**: FS-12까지 Debug 모드 테스트만 통과. Release 빌드 에러 및 CLI 앱 진입점 미구현.
+
+**서브 슬라이스**:
+
+| 서브 슬라이스 | 내용 |
+|-------------|------|
+| FS-13-A (chore) | vcxproj `/FS` 추가, 테스트 파일 Release 제외, app_main.cpp 추가 |
+| FS-13-B (TDD) | DummyDataGenerator 단위 테스트 + 구현 |
+| FS-13-C (TDD) | AppIntegrationTest + app_main.cpp CLI 앱 구현 |
+
+**테스트 목록** (`tests/DummyDataGeneratorTest.cpp`)
+
+```
+DummyDataGeneratorTest_SeedProducts_InsertsThreeProducts
+DummyDataGeneratorTest_SeedProducts_ProductsHaveValidFields
+DummyDataGeneratorTest_SeedProducts_IsDeterministic
+DummyDataGeneratorTest_SeedOrders_InsertsExpectedOrders
+DummyDataGeneratorTest_SeedOrders_OrdersAreInReservedStatus
+```
+
+**테스트 목록** (`tests/AppIntegrationTest.cpp`)
+
+```
+AppIntegrationTest_ShowsMenuAndExitsOnZero
+AppIntegrationTest_CreateOrder_AppearsInList
+AppIntegrationTest_FullLifecycle_WithDummyData
+AppIntegrationTest_InvalidMenu_ShowsError
+```
+
+**완료 기준**
+- Debug|x64: 기존 72개 + 신규 9개 이상 테스트 그린
+- Release|x64: 빌드 성공, CLI 앱 정상 동작
+
+**상세 계획**: `doc/plans/RED_PLAN_FS-13.md`
+
+---
+
 ## 4. 파일 생성 순서 (빌드 의존성 기준)
 
 ```
@@ -367,7 +411,8 @@ gtest_discover_tests(SampleOrderSystem_Tests)
 | FS-09 FileOrderRepository | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
 | FS-10 OrderController | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
 | FS-11 OrderView | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
-| FS-12 통합 테스트 | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |
+| FS-12 통합 테스트 | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
+| FS-13 Release 빌드+CLI+Dummy | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
 
 > ⬜ 미시작 / ✅ 완료 / ─ 해당 없음(소급 적용 전 완료 Slice)  
 > 커밋① = GREEN 완료 직후 커밋 / 커밋② = REFACTOR 완료 후 커밋
