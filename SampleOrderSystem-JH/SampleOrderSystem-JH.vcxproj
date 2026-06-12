@@ -146,6 +146,10 @@
     <ClCompile Include="tests\ProductionServiceTest.cpp" />
     <ClCompile Include="tests\FileOrderRepositoryTest.cpp" />
     <ClCompile Include="tests\OrderControllerTest.cpp" />
+    <ClCompile Include="tests\OrderViewTest.cpp" />
+    <ClCompile Include="tests\ProductionViewTest.cpp" />
+    <ClCompile Include="src\views\OrderView.cpp" />
+    <ClCompile Include="src\views\ProductionView.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\models\Order.h" />
@@ -160,6 +164,8 @@
     <ClInclude Include="include\services\ProductionService.h" />
     <ClInclude Include="include\repositories\FileOrderRepository.h" />
     <ClInclude Include="include\controllers\OrderController.h" />
+    <ClInclude Include="include\views\OrderView.h" />
+    <ClInclude Include="include\views\ProductionView.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
