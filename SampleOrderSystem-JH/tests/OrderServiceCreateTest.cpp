@@ -21,7 +21,7 @@ protected:
 
     // 헬퍼: 유효한 CreateOrderRequest 생성
     services::CreateOrderRequest MakeRequest(int product_id, int quantity = 100,
-                                              const std::string& deadline = "2025-12-31") {
+                                              const std::string& deadline = "2099-12-31") {
         return services::CreateOrderRequest{ product_id, quantity, deadline };
     }
 };

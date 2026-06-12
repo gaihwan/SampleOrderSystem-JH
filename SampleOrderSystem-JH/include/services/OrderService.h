@@ -14,7 +14,7 @@ struct CreateOrderRequest {
     std::string deadline;
 };
 
-struct ServiceResult {
+struct [[nodiscard]] ServiceResult {
     bool        success       = false;
     std::string error_message;
     int         order_id      = 0;
@@ -25,6 +25,7 @@ public:
     OrderService(repositories::IOrderRepository&  order_repo,
                  repositories::IProductRepository& product_repo);
 
+    // Note: Save() may throw on allocation failure; all other operations are noexcept.
     [[nodiscard]] ServiceResult CreateOrder(const CreateOrderRequest& req);
 
 private:
@@ -36,6 +37,7 @@ inline OrderService::OrderService(repositories::IOrderRepository&  order_repo,
                                    repositories::IProductRepository& product_repo)
     : order_repo_(order_repo), product_repo_(product_repo) {}
 
+// TODO: Move implementation to OrderService.cpp when project transitions to production build.
 inline ServiceResult OrderService::CreateOrder(const CreateOrderRequest& req) {
     // 1. 수량 유효성 검사
     auto qty_result = utils::OrderValidator::ValidateQuantity(req.quantity);
