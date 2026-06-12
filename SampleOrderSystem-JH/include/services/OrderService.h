@@ -1,5 +1,6 @@
 #pragma once
 #include <string>
+#include <optional>
 #include "repositories/IOrderRepository.h"
 #include "repositories/IProductRepository.h"
 #include "utils/BatchCalculator.h"
@@ -27,13 +28,16 @@ public:
 
     // Note: Save() may throw on allocation failure; all other operations are noexcept.
     [[nodiscard]] ServiceResult CreateOrder(const CreateOrderRequest& req);
-    [[nodiscard]] ServiceResult ConfirmOrder(int order_id);
-    [[nodiscard]] ServiceResult RejectOrder(int order_id);
-    [[nodiscard]] ServiceResult CancelOrder(int order_id);
+    [[nodiscard]] ServiceResult ConfirmOrder(int order_id) noexcept;
+    [[nodiscard]] ServiceResult RejectOrder(int order_id) noexcept;
+    [[nodiscard]] ServiceResult CancelOrder(int order_id) noexcept;
 
 private:
-    repositories::IOrderRepository&  order_repo_;
+    repositories::IOrderRepository&   order_repo_;
     repositories::IProductRepository& product_repo_;
+
+    // Helper: find order and return nullopt with error if not found
+    std::optional<models::Order> FindOrder(int order_id, ServiceResult& err) const noexcept;
 };
 
 inline OrderService::OrderService(repositories::IOrderRepository&  order_repo,
@@ -78,43 +82,49 @@ inline ServiceResult OrderService::CreateOrder(const CreateOrderRequest& req) {
     return ServiceResult{true, "", saved_id};
 }
 
-inline ServiceResult OrderService::ConfirmOrder(int order_id) {
+inline std::optional<models::Order> OrderService::FindOrder(int order_id, ServiceResult& err) const noexcept {
     auto order = order_repo_.FindById(order_id);
     if (!order.has_value()) {
-        return ServiceResult{false, "주문을 찾을 수 없습니다"};
+        err = ServiceResult{false, "주문을 찾을 수 없습니다"};
+        return std::nullopt;
     }
-    if (order->status != models::OrderStatus::RESERVED) {
+    return order;
+}
+
+inline ServiceResult OrderService::ConfirmOrder(int order_id) noexcept {
+    ServiceResult err;
+    auto order = FindOrder(order_id, err);
+    if (!order) return err;
+    if (order->status != models::OrderStatus::RESERVED)
         return ServiceResult{false, "확정할 수 없는 상태입니다"};
-    }
     order->status = models::OrderStatus::CONFIRMED;
-    (void)order_repo_.Update(*order);
+    if (!order_repo_.Update(*order))
+        return ServiceResult{false, "주문 저장에 실패했습니다"};
     return ServiceResult{true, "", order_id};
 }
 
-inline ServiceResult OrderService::RejectOrder(int order_id) {
-    auto order = order_repo_.FindById(order_id);
-    if (!order.has_value()) {
-        return ServiceResult{false, "주문을 찾을 수 없습니다"};
-    }
+inline ServiceResult OrderService::RejectOrder(int order_id) noexcept {
+    ServiceResult err;
+    auto order = FindOrder(order_id, err);
+    if (!order) return err;
     if (order->status != models::OrderStatus::RESERVED &&
-        order->status != models::OrderStatus::CONFIRMED) {
+        order->status != models::OrderStatus::CONFIRMED)
         return ServiceResult{false, "반려할 수 없는 상태입니다"};
-    }
     order->status = models::OrderStatus::REJECTED;
-    (void)order_repo_.Update(*order);
+    if (!order_repo_.Update(*order))
+        return ServiceResult{false, "주문 저장에 실패했습니다"};
     return ServiceResult{true, "", order_id};
 }
 
-inline ServiceResult OrderService::CancelOrder(int order_id) {
-    auto order = order_repo_.FindById(order_id);
-    if (!order.has_value()) {
-        return ServiceResult{false, "주문을 찾을 수 없습니다"};
-    }
-    if (order->status == models::OrderStatus::REJECTED) {
-        return ServiceResult{false, "이미 취소된 주문입니다"};
-    }
+inline ServiceResult OrderService::CancelOrder(int order_id) noexcept {
+    ServiceResult err;
+    auto order = FindOrder(order_id, err);
+    if (!order) return err;
+    if (order->status == models::OrderStatus::REJECTED)
+        return ServiceResult{false, "이미 거절된 주문입니다"};
     order->status = models::OrderStatus::REJECTED;
-    (void)order_repo_.Update(*order);
+    if (!order_repo_.Update(*order))
+        return ServiceResult{false, "주문 저장에 실패했습니다"};
     return ServiceResult{true, "", order_id};
 }
 

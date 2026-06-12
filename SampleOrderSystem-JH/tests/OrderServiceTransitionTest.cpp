@@ -36,7 +36,7 @@ TEST_F(OrderServiceTransitionTest, ConfirmOrder_ChangesStatus_ToConfirmed) {
 // TC-02: CONFIRMED 상태에서 ConfirmOrder 실패
 TEST_F(OrderServiceTransitionTest, ConfirmOrder_Fails_WhenStatusIsNotReserved) {
     int oid = CreateReservedOrder();
-    service_.ConfirmOrder(oid);  // 첫 번째 confirm
+    (void)service_.ConfirmOrder(oid);  // 첫 번째 confirm
     auto result = service_.ConfirmOrder(oid);  // 두 번째 confirm → 실패
     EXPECT_FALSE(result.success);
 }
@@ -54,7 +54,7 @@ TEST_F(OrderServiceTransitionTest, RejectOrder_ChangesStatus_ToRejected_FromRese
 // TC-04: CONFIRMED → REJECTED
 TEST_F(OrderServiceTransitionTest, RejectOrder_ChangesStatus_ToRejected_FromConfirmed) {
     int oid = CreateReservedOrder();
-    service_.ConfirmOrder(oid);
+    (void)service_.ConfirmOrder(oid);
     auto result = service_.RejectOrder(oid);
     ASSERT_TRUE(result.success);
     auto order = order_repo_.FindById(oid);
@@ -75,7 +75,7 @@ TEST_F(OrderServiceTransitionTest, CancelOrder_ChangesStatus_ToRejected_FromAnyN
 // TC-06: 이미 REJECTED 상태에서 CancelOrder 실패
 TEST_F(OrderServiceTransitionTest, CancelOrder_Fails_WhenAlreadyRejected) {
     int oid = CreateReservedOrder();
-    service_.RejectOrder(oid);
+    (void)service_.RejectOrder(oid);
     auto result = service_.CancelOrder(oid);
     EXPECT_FALSE(result.success);
 }
