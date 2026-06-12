@@ -412,7 +412,7 @@ gtest_discover_tests(SampleOrderSystem_Tests)
 | FS-10 OrderController | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
 | FS-11 OrderView | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
 | FS-12 통합 테스트 | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
-| FS-13 Release 빌드+CLI+Dummy | ✅ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |
+| FS-13 Release 빌드+CLI+Dummy | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
 
 > ⬜ 미시작 / ✅ 완료 / ─ 해당 없음(소급 적용 전 완료 Slice)  
 > 커밋① = GREEN 완료 직후 커밋 / 커밋② = REFACTOR 완료 후 커밋
