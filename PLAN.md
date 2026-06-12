@@ -363,7 +363,7 @@ gtest_discover_tests(SampleOrderSystem_Tests)
 | FS-05 InMemoryProductRepo | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
 | FS-06 OrderService 생성 | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
 | FS-07 OrderService 전이 | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
-| FS-08 ProductionService | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |
+| FS-08 ProductionService | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
 | FS-09 FileOrderRepository | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |
 | FS-10 OrderController | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |
 | FS-11 OrderView | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |
