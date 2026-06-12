@@ -1,6 +1,7 @@
 #pragma once
 #include <istream>
 #include <ostream>
+#include <iomanip>
 #include "repositories/IOrderRepository.h"
 #include "repositories/IProductRepository.h"
 #include "services/OrderService.h"
@@ -39,7 +40,11 @@ public:
             int menu = 0;
             if (!(input_ >> menu) || menu == 0) break;
 
-            if (menu == 2) {
+            if (menu == 1) {
+                // 주문 생성: 사용 가능한 제품 목록을 먼저 보여준다
+                RenderProductList();
+                ctrl.HandleInput(menu);
+            } else if (menu == 2) {
                 // 주문 목록 직접 출력
                 view.RenderOrderList(order_repo_.FindAll());
             } else if (menu >= 3 && menu <= 7) {
@@ -58,6 +63,26 @@ private:
     repositories::IProductRepository& product_repo_;
     std::istream&                     input_;
     std::ostream&                     output_;
+
+    // 등록된 제품 목록을 표 형태로 출력한다.
+    void RenderProductList() const {
+        auto products = product_repo_.FindAll();
+        output_ << u8"[사용 가능한 제품 목록]\n";
+        output_ << std::left
+                << std::setw(6)  << u8"ID"
+                << std::setw(12) << u8"제품명"
+                << std::setw(10) << u8"배치크기"
+                << std::setw(10) << u8"납기(일)"
+                << u8"수율\n";
+        for (const auto& p : products) {
+            output_ << std::left
+                    << std::setw(6)  << p.id
+                    << std::setw(12) << p.name
+                    << std::setw(10) << p.batch_size
+                    << std::setw(10) << p.batch_days
+                    << p.yield_rate << "\n";
+        }
+    }
 };
 
 }  // namespace app
