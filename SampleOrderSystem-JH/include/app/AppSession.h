@@ -8,6 +8,7 @@
 #include "services/ProductionService.h"
 #include "controllers/OrderController.h"
 #include "views/OrderView.h"
+#include "views/ProductionView.h"
 
 namespace app {
 
@@ -24,17 +25,18 @@ public:
 
     // 메뉴 루프를 실행한다. 입력 스트림에서 0 을 읽으면 종료한다.
     // 메뉴: 1=주문생성, 2=주문목록, 3=주문확정, 4=주문반려,
-    //        5=주문취소, 6=생산시작, 7=출하, 0=종료
+    //        5=주문취소, 6=생산시작, 7=출하, 8=생산현황, 0=종료
     void Run() {
         services::OrderService      order_svc(order_repo_, product_repo_);
         services::ProductionService prod_svc(order_repo_);
         controllers::OrderController ctrl(order_svc, prod_svc, input_, output_);
-        views::OrderView view(output_);
+        views::OrderView       order_view(output_);
+        views::ProductionView  prod_view(output_);
 
         while (true) {
             output_ << u8"\n=== S-Semi 시료 생산주문 관리 시스템 ===\n";
             output_ << u8"  1.주문생성  2.주문목록  3.주문확정  4.주문반려\n";
-            output_ << u8"  5.주문취소  6.생산시작  7.출하       0.종료\n";
+            output_ << u8"  5.주문취소  6.생산시작  7.출하  8.생산현황  0.종료\n";
             output_ << u8"> ";
 
             int menu = 0;
@@ -46,12 +48,16 @@ public:
                 ctrl.HandleInput(menu);
             } else if (menu == 2) {
                 // 주문 목록 직접 출력
-                view.RenderOrderList(order_repo_.FindAll());
+                order_view.RenderOrderList(order_repo_.FindAll());
             } else if (menu >= 3 && menu <= 7) {
                 // 주문 ID 입력이 필요한 메뉴: 현재 주문 목록을 먼저 보여준다
                 output_ << u8"[현재 주문 목록]\n";
-                view.RenderOrderList(order_repo_.FindAll());
+                order_view.RenderOrderList(order_repo_.FindAll());
                 ctrl.HandleInput(menu);
+            } else if (menu == 8) {
+                // 생산 현황: CONFIRMED / PRODUCING 주문 표시
+                auto products = product_repo_.FindAll();
+                prod_view.RenderProductionStatus(prod_svc.GetProductionStatus(), products);
             } else {
                 ctrl.HandleInput(menu);
             }
