@@ -359,7 +359,7 @@ gtest_discover_tests(SampleOrderSystem_Tests)
 | FS-01 BatchCalculator | ─ | ✅ | ✅ | ─ | ✅ | ✅ | ✅ |
 | FS-02 OrderValidator | ─ | ✅ | ✅ | ─ | ✅ | ✅ | ✅ |
 | FS-03 Domain Model | ─ | ✅ | ✅ | ─ | ✅ | ✅ | ✅ |
-| FS-04 InMemoryOrderRepo | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |
+| FS-04 InMemoryOrderRepo | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
 | FS-05 InMemoryProductRepo | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |
 | FS-06 OrderService 생성 | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |
 | FS-07 OrderService 전이 | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |
