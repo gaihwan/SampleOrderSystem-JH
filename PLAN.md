@@ -353,7 +353,7 @@ gtest_discover_tests(SampleOrderSystem_Tests)
 
 | Slice | RED | GREEN | REVIEW | REFACTOR | 커밋 |
 |-------|:---:|:-----:|:------:|:--------:|:----:|
-| FS-01 BatchCalculator | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |
+| FS-01 BatchCalculator | ✅ | ✅ | ✅ | ✅ | ✅ |
 | FS-02 OrderValidator | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |
 | FS-03 Domain Model | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |
 | FS-04 InMemoryOrderRepo | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |
