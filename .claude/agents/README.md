@@ -12,7 +12,7 @@ tdd_orchestrator
       │
       ├── tdd_red_expert               ← RED 단계
       ├── tdd_green_expert             ← GREEN 단계
-      └── tdd_refactor_build_git_expert ← REFACTOR + 빌드 + Git
+      └── tdd_review_refactor_build_git_expert ← 리뷰 + REFACTOR + 빌드 + Git
                 │
                 └── (설계 자문)
                       ├── tdd_console_mvc_expert
@@ -29,7 +29,7 @@ tdd_orchestrator
 | `tdd_orchestrator.md` | **총 감독** | 전체 TDD 사이클 조율, 품질 게이트 관리, 에이전트 위임 |
 | `tdd_red_expert.md` | **RED 전문가** | 실패하는 테스트 작성, 올바른 실패 확인 |
 | `tdd_green_expert.md` | **GREEN 전문가** | 최소 구현으로 테스트 통과, YAGNI 원칙 준수 |
-| `tdd_refactor_build_git_expert.md` | **REFACTOR/빌드/Git 전문가** | 코드 정리, 빌드 검증, 커밋 컨벤션 적용 |
+| `tdd_review_refactor_build_git_expert.md` | **리뷰/REFACTOR/빌드/Git 전문가** | 코드 리뷰, 사용자 승인 요청, 코드 정리, 빌드 검증, 커밋 컨벤션 적용 |
 | `tdd_console_mvc_expert.md` | **Console MVC 전문가** | UI/Controller 설계 자문, 콘솔 MVC 패턴 지원 |
 | `tdd_data_persistence_expert.md` | **Data Persistence 전문가** | Repository 패턴, 파일/DB 영속성, 모니터링 설계 |
 | `tdd_dummy_data_generator_expert.md` | **DummyDataGenerator 전문가** | 테스트 픽스처, 더미 데이터 팩토리 설계 |
@@ -52,9 +52,9 @@ tdd_orchestrator
         │
         ▼  품질 게이트: 전체 테스트 그린인가?
         │
-[REFACTOR/빌드/Git 전문가] 정리 + 빌드 검증 + 커밋
+[리뷰/REFACTOR/빌드/Git 전문가] 코드 리뷰 → 사용자 승인 → 정리 + 빌드 검증 + 커밋
         │
-        ▼  품질 게이트: 빌드 성공, 경고 없음, 컨벤션 준수
+        ▼  품질 게이트: 리뷰 승인, 빌드 성공, 경고 없음, 컨벤션 준수
         │
 [Orchestrator] 다음 Feature Slice
 ```

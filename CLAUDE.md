@@ -54,7 +54,7 @@ TDD 개발은 아래 에이전트 팀이 역할을 분담하여 진행한다.
 | `.claude/agents/tdd_orchestrator.md` | 총 감독 — 전체 TDD 사이클 조율 및 품질 게이트 관리 |
 | `.claude/agents/tdd_red_expert.md` | RED 전문가 — 실패 테스트 작성 |
 | `.claude/agents/tdd_green_expert.md` | GREEN 전문가 — 최소 구현 |
-| `.claude/agents/tdd_refactor_build_git_expert.md` | REFACTOR/빌드/Git 전문가 |
+| `.claude/agents/tdd_review_refactor_build_git_expert.md` | 리뷰/REFACTOR/빌드/Git 전문가 |
 | `.claude/agents/tdd_console_mvc_expert.md` | Console MVC 설계 자문 |
 | `.claude/agents/tdd_data_persistence_expert.md` | Repository/모니터링 설계 자문 |
 | `.claude/agents/tdd_dummy_data_generator_expert.md` | 테스트 더미 데이터 설계 |
@@ -126,7 +126,7 @@ SampleOrderSystem-JH/
         ├── tdd_orchestrator.md
         ├── tdd_red_expert.md
         ├── tdd_green_expert.md
-        ├── tdd_refactor_build_git_expert.md
+        ├── tdd_review_refactor_build_git_expert.md
         ├── tdd_console_mvc_expert.md
         ├── tdd_data_persistence_expert.md
         ├── tdd_dummy_data_generator_expert.md

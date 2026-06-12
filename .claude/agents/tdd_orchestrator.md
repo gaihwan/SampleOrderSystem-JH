@@ -47,7 +47,17 @@ SampleOrderSystem의 전체 TDD 개발 흐름을 총괄한다.
        │  품질 게이트: 모든 테스트가 통과하는가? 다른 테스트가 깨지지 않았는가?
        │  NO → GREEN 전문가에게 수정 요청
        ▼
-[REFACTOR/빌드/Git 전문가] ─ 정리 + 빌드 검증 + 커밋
+[REFACTOR/리뷰/빌드/Git 전문가] ─ 코드 리뷰 수행
+       │
+       │  품질 게이트: 리뷰 보고서 작성 완료 여부
+       │  NO → 리뷰 보고서 재작성 요청
+       ▼
+[사용자 승인 대기] ← 반드시 사용자 확인 필요
+       │
+       ├─ 거부/재검토 요청 → 피드백 반영 후 재보고, 또는 RED 단계 롤백
+       │
+       ▼
+[REFACTOR/리뷰/빌드/Git 전문가] ─ 리팩터링(필요 시) + 빌드 검증 + 커밋
        │
        │  품질 게이트: 빌드 성공, 전체 테스트 그린, 경고 없음
        │  NO → 해당 전문가에게 수정 요청
@@ -72,7 +82,13 @@ SampleOrderSystem의 전체 TDD 개발 흐름을 총괄한다.
 - [ ] 과도한 구현이 없는가 (YAGNI)
 - [ ] mock은 불가피한 경우(외부 의존성)에만 사용했는가
 
+### REVIEW 게이트 (사용자 승인 필수)
+- [ ] 코드 리뷰가 수행되었는가 (생략 불가)
+- [ ] 리뷰 결과가 정해진 형식으로 보고되었는가
+- [ ] **사용자의 명시적 승인을 받았는가** ← 이 항목이 확인되기 전까지 다음 단계 진행 불가
+
 ### REFACTOR 게이트
+- [ ] 리뷰 필수 수정 항목이 모두 반영되었는가
 - [ ] 빌드가 성공하는가 (`cmake --build`)
 - [ ] `ctest --output-on-failure` 전체 그린인가
 - [ ] 컴파일러 경고가 없는가
@@ -87,7 +103,7 @@ SampleOrderSystem의 전체 TDD 개발 흐름을 총괄한다.
 |---------|------|---------|
 | RED 전문가 | `tdd_red_expert.md` | 실패하는 테스트 작성 |
 | GREEN 전문가 | `tdd_green_expert.md` | 최소 구현으로 테스트 통과 |
-| REFACTOR/빌드/Git 전문가 | `tdd_refactor_build_git_expert.md` | 코드 정리, 빌드 검증, 커밋 |
+| 리뷰/REFACTOR/빌드/Git 전문가 | `tdd_review_refactor_build_git_expert.md` | 코드 리뷰, 사용자 승인 요청, 코드 정리, 빌드 검증, 커밋 |
 | Console MVC 전문가 | `tdd_console_mvc_expert.md` | UI/Controller 설계 지원 |
 | Data Persistence 전문가 | `tdd_data_persistence_expert.md` | 저장소/모니터링 설계 지원 |
 | DummyDataGenerator 전문가 | `tdd_dummy_data_generator_expert.md` | 테스트 데이터 생성 지원 |
