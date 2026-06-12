@@ -1,6 +1,7 @@
 #pragma once
 #include <string>
 #include <optional>
+#include <ctime>
 #include "repositories/IOrderRepository.h"
 #include "repositories/IProductRepository.h"
 #include "utils/BatchCalculator.h"
@@ -76,6 +77,20 @@ inline ServiceResult OrderService::CreateOrder(const CreateOrderRequest& req) {
     order.status           = models::OrderStatus::RESERVED;
     order.required_batches = batch_result.required_batches;
     order.estimated_yield  = batch_result.estimated_yield;
+
+    // 주문 생성일 설정 (YYYY-MM-DD)
+    {
+        std::time_t now = std::time(nullptr);
+        struct tm tm_buf = {};
+#ifdef _WIN32
+        localtime_s(&tm_buf, &now);
+#else
+        localtime_r(&now, &tm_buf);
+#endif
+        char date_buf[11];
+        std::strftime(date_buf, sizeof(date_buf), "%Y-%m-%d", &tm_buf);
+        order.created_at = date_buf;
+    }
 
     // 6. 저장 후 id 반환
     int saved_id = order_repo_.Save(order);

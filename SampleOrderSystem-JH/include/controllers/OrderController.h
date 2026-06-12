@@ -54,78 +54,70 @@ inline void OrderController::HandleInput() {
 inline void OrderController::HandleCreateOrder() {
     int product_id = 0, quantity = 0;
     std::string deadline;
-    if (!(input_ >> product_id >> quantity >> deadline)) {
-        output_ << u8"입력 오류.\n";
-        return;
-    }
+    output_ << u8"  제품 ID 입력: ";
+    if (!(input_ >> product_id)) { output_ << u8"입력 오류.\n"; return; }
+    output_ << u8"  수량 입력: ";
+    if (!(input_ >> quantity))   { output_ << u8"입력 오류.\n"; return; }
+    output_ << u8"  마감일 입력 (YYYY-MM-DD): ";
+    if (!(input_ >> deadline))   { output_ << u8"입력 오류.\n"; return; }
     auto result = order_service_.CreateOrder({product_id, quantity, deadline});
-    if (result.success) output_ << u8"주문 생성 성공. ID: " << result.order_id << "\n";
-    else                output_ << u8"주문 생성 실패: " << result.error_message << "\n";
+    if (result.success) output_ << u8"  >> 주문 생성 성공. 주문 ID: " << result.order_id << "\n";
+    else                output_ << u8"  >> 주문 생성 실패: " << result.error_message << "\n";
 }
 
 inline void OrderController::HandleConfirmOrder() noexcept {
     int order_id = 0;
-    if (!(input_ >> order_id)) {
-        output_ << u8"입력 오류.\n";
-        return;
-    }
+    output_ << u8"  확정할 주문 ID 입력: ";
+    if (!(input_ >> order_id)) { output_ << u8"입력 오류.\n"; return; }
     auto result = order_service_.ConfirmOrder(order_id);
     if (result.success)
-        output_ << u8"주문 확정 성공.\n";
+        output_ << u8"  >> 주문 확정 성공.\n";
     else
-        output_ << u8"주문 확정 실패: " << result.error_message << "\n";
+        output_ << u8"  >> 주문 확정 실패: " << result.error_message << "\n";
 }
 
 inline void OrderController::HandleRejectOrder() noexcept {
     int order_id = 0;
-    if (!(input_ >> order_id)) {
-        output_ << u8"입력 오류.\n";
-        return;
-    }
+    output_ << u8"  반려할 주문 ID 입력: ";
+    if (!(input_ >> order_id)) { output_ << u8"입력 오류.\n"; return; }
     auto result = order_service_.RejectOrder(order_id);
     if (result.success)
-        output_ << u8"주문 반려 성공.\n";
+        output_ << u8"  >> 주문 반려 성공.\n";
     else
-        output_ << u8"주문 반려 실패: " << result.error_message << "\n";
+        output_ << u8"  >> 주문 반려 실패: " << result.error_message << "\n";
 }
 
 inline void OrderController::HandleCancelOrder() noexcept {
     int order_id = 0;
-    if (!(input_ >> order_id)) {
-        output_ << u8"입력 오류.\n";
-        return;
-    }
+    output_ << u8"  취소할 주문 ID 입력: ";
+    if (!(input_ >> order_id)) { output_ << u8"입력 오류.\n"; return; }
     auto result = order_service_.CancelOrder(order_id);
     if (result.success)
-        output_ << u8"주문 취소 성공.\n";
+        output_ << u8"  >> 주문 취소 성공.\n";
     else
-        output_ << u8"주문 취소 실패: " << result.error_message << "\n";
+        output_ << u8"  >> 주문 취소 실패: " << result.error_message << "\n";
 }
 
 inline void OrderController::HandleStartProduction() noexcept {
     int order_id = 0;
-    if (!(input_ >> order_id)) {
-        output_ << u8"입력 오류.\n";
-        return;
-    }
+    output_ << u8"  생산 시작할 주문 ID 입력: ";
+    if (!(input_ >> order_id)) { output_ << u8"입력 오류.\n"; return; }
     auto result = production_service_.StartProduction(order_id);
     if (result.success)
-        output_ << u8"생산 시작 성공.\n";
+        output_ << u8"  >> 생산 시작 성공.\n";
     else
-        output_ << u8"생산 시작 실패: " << result.error_message << "\n";
+        output_ << u8"  >> 생산 시작 실패: " << result.error_message << "\n";
 }
 
 inline void OrderController::HandleRelease() noexcept {
     int order_id = 0;
-    if (!(input_ >> order_id)) {
-        output_ << u8"입력 오류.\n";
-        return;
-    }
+    output_ << u8"  출하할 주문 ID 입력: ";
+    if (!(input_ >> order_id)) { output_ << u8"입력 오류.\n"; return; }
     auto result = production_service_.Release(order_id);
     if (result.success)
-        output_ << u8"릴리즈 성공.\n";
+        output_ << u8"  >> 출하 성공.\n";
     else
-        output_ << u8"릴리즈 실패: " << result.error_message << "\n";
+        output_ << u8"  >> 출하 실패: " << result.error_message << "\n";
 }
 
 // AppSession 이 메뉴 번호를 미리 읽은 경우 사용하는 오버로드.
