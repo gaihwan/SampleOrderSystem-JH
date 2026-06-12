@@ -1,5 +1,6 @@
 #pragma once
-#include <iostream>
+#include <istream>
+#include <ostream>
 #include <sstream>
 #include "services/OrderService.h"
 #include "services/ProductionService.h"
@@ -22,11 +23,11 @@ private:
     std::ostream&                output_;
 
     void HandleCreateOrder();
-    void HandleConfirmOrder();
-    void HandleRejectOrder();
-    void HandleCancelOrder();
-    void HandleStartProduction();
-    void HandleRelease();
+    void HandleConfirmOrder()    noexcept;
+    void HandleRejectOrder()     noexcept;
+    void HandleCancelOrder()     noexcept;
+    void HandleStartProduction() noexcept;
+    void HandleRelease()         noexcept;
 };
 
 // --- implementations ---
@@ -40,8 +41,11 @@ inline OrderController::OrderController(services::OrderService&      order_servi
     , output_(output) {}
 
 inline void OrderController::HandleInput() {
-    int menu;
-    input_ >> menu;
+    int menu = 0;
+    if (!(input_ >> menu)) {
+        output_ << u8"입력 오류.\n";
+        return;
+    }
     switch (menu) {
         case 1: HandleCreateOrder();     break;
         case 2: HandleConfirmOrder();    break;
@@ -55,20 +59,23 @@ inline void OrderController::HandleInput() {
 }
 
 inline void OrderController::HandleCreateOrder() {
-    int product_id;
-    int quantity;
+    int product_id = 0, quantity = 0;
     std::string deadline;
-    input_ >> product_id >> quantity >> deadline;
+    if (!(input_ >> product_id >> quantity >> deadline)) {
+        output_ << u8"입력 오류.\n";
+        return;
+    }
     auto result = order_service_.CreateOrder({product_id, quantity, deadline});
-    if (result.success)
-        output_ << u8"주문 생성 성공. ID: " << result.order_id << "\n";
-    else
-        output_ << u8"주문 생성 실패: " << result.error_message << "\n";
+    if (result.success) output_ << u8"주문 생성 성공. ID: " << result.order_id << "\n";
+    else                output_ << u8"주문 생성 실패: " << result.error_message << "\n";
 }
 
-inline void OrderController::HandleConfirmOrder() {
-    int order_id;
-    input_ >> order_id;
+inline void OrderController::HandleConfirmOrder() noexcept {
+    int order_id = 0;
+    if (!(input_ >> order_id)) {
+        output_ << u8"입력 오류.\n";
+        return;
+    }
     auto result = order_service_.ConfirmOrder(order_id);
     if (result.success)
         output_ << u8"주문 확정 성공.\n";
@@ -76,9 +83,12 @@ inline void OrderController::HandleConfirmOrder() {
         output_ << u8"주문 확정 실패: " << result.error_message << "\n";
 }
 
-inline void OrderController::HandleRejectOrder() {
-    int order_id;
-    input_ >> order_id;
+inline void OrderController::HandleRejectOrder() noexcept {
+    int order_id = 0;
+    if (!(input_ >> order_id)) {
+        output_ << u8"입력 오류.\n";
+        return;
+    }
     auto result = order_service_.RejectOrder(order_id);
     if (result.success)
         output_ << u8"주문 반려 성공.\n";
@@ -86,9 +96,12 @@ inline void OrderController::HandleRejectOrder() {
         output_ << u8"주문 반려 실패: " << result.error_message << "\n";
 }
 
-inline void OrderController::HandleCancelOrder() {
-    int order_id;
-    input_ >> order_id;
+inline void OrderController::HandleCancelOrder() noexcept {
+    int order_id = 0;
+    if (!(input_ >> order_id)) {
+        output_ << u8"입력 오류.\n";
+        return;
+    }
     auto result = order_service_.CancelOrder(order_id);
     if (result.success)
         output_ << u8"주문 취소 성공.\n";
@@ -96,9 +109,12 @@ inline void OrderController::HandleCancelOrder() {
         output_ << u8"주문 취소 실패: " << result.error_message << "\n";
 }
 
-inline void OrderController::HandleStartProduction() {
-    int order_id;
-    input_ >> order_id;
+inline void OrderController::HandleStartProduction() noexcept {
+    int order_id = 0;
+    if (!(input_ >> order_id)) {
+        output_ << u8"입력 오류.\n";
+        return;
+    }
     auto result = production_service_.StartProduction(order_id);
     if (result.success)
         output_ << u8"생산 시작 성공.\n";
@@ -106,9 +122,12 @@ inline void OrderController::HandleStartProduction() {
         output_ << u8"생산 시작 실패: " << result.error_message << "\n";
 }
 
-inline void OrderController::HandleRelease() {
-    int order_id;
-    input_ >> order_id;
+inline void OrderController::HandleRelease() noexcept {
+    int order_id = 0;
+    if (!(input_ >> order_id)) {
+        output_ << u8"입력 오류.\n";
+        return;
+    }
     auto result = production_service_.Release(order_id);
     if (result.success)
         output_ << u8"릴리즈 성공.\n";

@@ -82,7 +82,30 @@ TEST_F(OrderControllerTest, CancelOrder_CallsServiceWithOrderId) {
 // TC-06: 잘못된 메뉴 "99" -> output에 오류 메시지 포함
 TEST_F(OrderControllerTest, InvalidInput_ShowsErrorMessage) {
     std::string out = RunController("99\n");
-    EXPECT_FALSE(out.empty());
-    // 오류 메시지가 출력에 포함되어야 함
-    EXPECT_NE(out.find(u8"잘못"), std::string::npos);  // "잘못"
+    EXPECT_EQ(out, u8"잘못된 메뉴입니다.\n");
+}
+
+// TC-07: "5" + order_id -> status == PRODUCING
+TEST_F(OrderControllerTest, StartProduction_CallsServiceWithOrderId) {
+    int pid = SaveProduct();
+    auto r = order_service_.CreateOrder({pid, 100, "2099-12-31"});
+    (void)order_service_.ConfirmOrder(r.order_id);
+    std::string input = "5\n" + std::to_string(r.order_id) + "\n";
+    RunController(input);
+    auto order = order_repo_.FindById(r.order_id);
+    ASSERT_TRUE(order.has_value());
+    EXPECT_EQ(order->status, models::OrderStatus::PRODUCING);
+}
+
+// TC-08: "6" + order_id -> status == RELEASE
+TEST_F(OrderControllerTest, Release_CallsServiceWithOrderId) {
+    int pid = SaveProduct();
+    auto r = order_service_.CreateOrder({pid, 100, "2099-12-31"});
+    (void)order_service_.ConfirmOrder(r.order_id);
+    (void)production_service_.StartProduction(r.order_id);
+    std::string input = "6\n" + std::to_string(r.order_id) + "\n";
+    RunController(input);
+    auto order = order_repo_.FindById(r.order_id);
+    ASSERT_TRUE(order.has_value());
+    EXPECT_EQ(order->status, models::OrderStatus::RELEASE);
 }
