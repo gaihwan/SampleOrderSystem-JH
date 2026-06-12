@@ -365,7 +365,7 @@ gtest_discover_tests(SampleOrderSystem_Tests)
 | FS-07 OrderService 전이 | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
 | FS-08 ProductionService | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
 | FS-09 FileOrderRepository | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
-| FS-10 OrderController | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |
+| FS-10 OrderController | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
 | FS-11 OrderView | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |
 | FS-12 통합 테스트 | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |
 
