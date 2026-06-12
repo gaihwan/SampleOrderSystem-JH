@@ -16,6 +16,7 @@ private:
     int next_id_ = 1;
 };
 
+// --- GREEN implementations ---
 inline int InMemoryProductRepository::Save(const models::Product& product) {
     models::Product stored = product;
     stored.id = next_id_++;
