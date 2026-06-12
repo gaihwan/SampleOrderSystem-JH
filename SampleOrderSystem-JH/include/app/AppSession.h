@@ -3,11 +3,13 @@
 #include <ostream>
 #include "repositories/IOrderRepository.h"
 #include "repositories/IProductRepository.h"
+#include "services/OrderService.h"
+#include "services/ProductionService.h"
+#include "controllers/OrderController.h"
+#include "views/OrderView.h"
 
 namespace app {
 
-// AppSession: 콘솔 앱의 메인 메뉴 루프를 캡슐화한다.
-// GREEN 단계에서 실제 구현 예정. 현재는 stub.
 class AppSession {
 public:
     AppSession(repositories::IOrderRepository&   order_repo,
@@ -20,8 +22,28 @@ public:
         , output_(output) {}
 
     // 메뉴 루프를 실행한다. 입력 스트림에서 0 을 읽으면 종료한다.
+    // 메뉴: 1=주문생성, 2=주문목록, 3=주문확정, 4=주문반려,
+    //        5=주문취소, 6=생산시작, 7=출하, 0=종료
     void Run() {
-        // TODO(GREEN): 메뉴 출력 및 입력 처리 루프 구현 필요
+        services::OrderService      order_svc(order_repo_, product_repo_);
+        services::ProductionService prod_svc(order_repo_);
+        controllers::OrderController ctrl(order_svc, prod_svc, input_, output_);
+        views::OrderView view(output_);
+
+        while (true) {
+            output_ << u8"=== S-Semi 시료 생산주문 관리 시스템 ===\n";
+            output_ << u8"1.주문생성 2.주문목록 3.주문확정 4.주문반려 5.주문취소 6.생산시작 7.출하 0.종료\n";
+            output_ << "> ";
+
+            int menu = 0;
+            if (!(input_ >> menu) || menu == 0) break;
+
+            if (menu == 2) {
+                view.RenderOrderList(order_repo_.FindAll());
+            } else {
+                ctrl.HandleInput(menu);
+            }
+        }
     }
 
 private:

@@ -15,6 +15,7 @@ public:
                     std::ostream&                output);
 
     void HandleInput();
+    void HandleInput(int menu);  // AppSession 에서 메뉴 번호를 미리 읽은 경우에 사용
 
 private:
     services::OrderService&      order_service_;
@@ -133,6 +134,20 @@ inline void OrderController::HandleRelease() noexcept {
         output_ << u8"릴리즈 성공.\n";
     else
         output_ << u8"릴리즈 실패: " << result.error_message << "\n";
+}
+
+// AppSession 이 메뉴 번호를 미리 읽은 경우 사용하는 오버로드.
+// AppSession 메뉴 체계: 1=생성, 3=확정, 4=반려, 5=취소, 6=생산시작, 7=출하
+inline void OrderController::HandleInput(int menu) {
+    switch (menu) {
+        case 1: HandleCreateOrder();     break;
+        case 3: HandleConfirmOrder();    break;
+        case 4: HandleRejectOrder();     break;
+        case 5: HandleCancelOrder();     break;
+        case 6: HandleStartProduction(); break;
+        case 7: HandleRelease();         break;
+        default: output_ << u8"잘못된 메뉴입니다.\n"; break;
+    }
 }
 
 }  // namespace controllers
