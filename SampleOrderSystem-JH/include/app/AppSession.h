@@ -31,15 +31,22 @@ public:
         views::OrderView view(output_);
 
         while (true) {
-            output_ << u8"=== S-Semi 시료 생산주문 관리 시스템 ===\n";
-            output_ << u8"1.주문생성 2.주문목록 3.주문확정 4.주문반려 5.주문취소 6.생산시작 7.출하 0.종료\n";
-            output_ << "> ";
+            output_ << u8"\n=== S-Semi 시료 생산주문 관리 시스템 ===\n";
+            output_ << u8"  1.주문생성  2.주문목록  3.주문확정  4.주문반려\n";
+            output_ << u8"  5.주문취소  6.생산시작  7.출하       0.종료\n";
+            output_ << u8"> ";
 
             int menu = 0;
             if (!(input_ >> menu) || menu == 0) break;
 
             if (menu == 2) {
+                // 주문 목록 직접 출력
                 view.RenderOrderList(order_repo_.FindAll());
+            } else if (menu >= 3 && menu <= 7) {
+                // 주문 ID 입력이 필요한 메뉴: 현재 주문 목록을 먼저 보여준다
+                output_ << u8"[현재 주문 목록]\n";
+                view.RenderOrderList(order_repo_.FindAll());
+                ctrl.HandleInput(menu);
             } else {
                 ctrl.HandleInput(menu);
             }
