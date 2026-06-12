@@ -46,33 +46,33 @@ TEST_F(OrderControllerTest, CreateOrder_CallsServiceWithParsedArgs) {
     EXPECT_EQ(all.size(), 1u);
 }
 
-// TC-03: "2" + order_id -> status == CONFIRMED
+// TC-03: "3" + order_id -> status == CONFIRMED
 TEST_F(OrderControllerTest, ConfirmOrder_CallsServiceWithOrderId) {
-    int pid = SaveProduct();
-    auto r = order_service_.CreateOrder({ pid, 100, "2099-12-31" });
-    std::string input = "2\n" + std::to_string(r.order_id) + "\n";
-    RunController(input);
-    auto order = order_repo_.FindById(r.order_id);
-    ASSERT_TRUE(order.has_value());
-    EXPECT_EQ(order->status, models::OrderStatus::CONFIRMED);
-}
-
-// TC-04: "3" + order_id -> status == REJECTED
-TEST_F(OrderControllerTest, RejectOrder_CallsServiceWithOrderId) {
     int pid = SaveProduct();
     auto r = order_service_.CreateOrder({ pid, 100, "2099-12-31" });
     std::string input = "3\n" + std::to_string(r.order_id) + "\n";
     RunController(input);
     auto order = order_repo_.FindById(r.order_id);
     ASSERT_TRUE(order.has_value());
-    EXPECT_EQ(order->status, models::OrderStatus::REJECTED);
+    EXPECT_EQ(order->status, models::OrderStatus::CONFIRMED);
 }
 
-// TC-05: "4" + order_id -> status == REJECTED (cancel)
-TEST_F(OrderControllerTest, CancelOrder_CallsServiceWithOrderId) {
+// TC-04: "4" + order_id -> status == REJECTED
+TEST_F(OrderControllerTest, RejectOrder_CallsServiceWithOrderId) {
     int pid = SaveProduct();
     auto r = order_service_.CreateOrder({ pid, 100, "2099-12-31" });
     std::string input = "4\n" + std::to_string(r.order_id) + "\n";
+    RunController(input);
+    auto order = order_repo_.FindById(r.order_id);
+    ASSERT_TRUE(order.has_value());
+    EXPECT_EQ(order->status, models::OrderStatus::REJECTED);
+}
+
+// TC-05: "5" + order_id -> status == REJECTED (cancel)
+TEST_F(OrderControllerTest, CancelOrder_CallsServiceWithOrderId) {
+    int pid = SaveProduct();
+    auto r = order_service_.CreateOrder({ pid, 100, "2099-12-31" });
+    std::string input = "5\n" + std::to_string(r.order_id) + "\n";
     RunController(input);
     auto order = order_repo_.FindById(r.order_id);
     ASSERT_TRUE(order.has_value());
@@ -85,25 +85,25 @@ TEST_F(OrderControllerTest, InvalidInput_ShowsErrorMessage) {
     EXPECT_EQ(out, u8"잘못된 메뉴입니다.\n");
 }
 
-// TC-07: "5" + order_id -> status == PRODUCING
+// TC-07: "6" + order_id -> status == PRODUCING
 TEST_F(OrderControllerTest, StartProduction_CallsServiceWithOrderId) {
     int pid = SaveProduct();
     auto r = order_service_.CreateOrder({pid, 100, "2099-12-31"});
     (void)order_service_.ConfirmOrder(r.order_id);
-    std::string input = "5\n" + std::to_string(r.order_id) + "\n";
+    std::string input = "6\n" + std::to_string(r.order_id) + "\n";
     RunController(input);
     auto order = order_repo_.FindById(r.order_id);
     ASSERT_TRUE(order.has_value());
     EXPECT_EQ(order->status, models::OrderStatus::PRODUCING);
 }
 
-// TC-08: "6" + order_id -> status == RELEASE
+// TC-08: "7" + order_id -> status == RELEASE
 TEST_F(OrderControllerTest, Release_CallsServiceWithOrderId) {
     int pid = SaveProduct();
     auto r = order_service_.CreateOrder({pid, 100, "2099-12-31"});
     (void)order_service_.ConfirmOrder(r.order_id);
     (void)production_service_.StartProduction(r.order_id);
-    std::string input = "6\n" + std::to_string(r.order_id) + "\n";
+    std::string input = "7\n" + std::to_string(r.order_id) + "\n";
     RunController(input);
     auto order = order_repo_.FindById(r.order_id);
     ASSERT_TRUE(order.has_value());

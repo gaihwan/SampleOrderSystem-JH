@@ -64,35 +64,35 @@ TEST_F(AppIntegrationTest, CreateOrder_AppearsInList) {
     EXPECT_EQ(all.size(), 1u);
 }
 
-// TC-03: DummyData 시드 → 주문생성(1) → 확정(3) → 생산시작(6) → 출하(7) → 전체 라이프사이클 성공
+// TC-03: DummyData 시드 → AppSession 경유 전체 라이프사이클 (생성→확정→생산시작→출하)
 TEST_F(AppIntegrationTest, FullLifecycle_WithDummyData) {
-    // DummyData 로 제품 시드
+    // DummyData로 제품 시드
     utils::DummyDataGenerator::SeedProducts(product_repo_);
     auto products = product_repo_.FindAll();
     ASSERT_FALSE(products.empty());
     int pid = products[0].id;
 
-    // 메뉴 번호는 OrderController::HandleInput 과 동일한 규칙:
-    // 1=생성, 2=확정, 3=반려, 5=생산시작, 6=출하
-    // AppSession 이 같은 메뉴 번호 체계를 사용한다고 가정한다.
-    // (GREEN 단계에서 실제 메뉴 번호 확정)
-    // 여기서는 주문 생성 후 RESERVED 상태 확인까지만 검증한다.
+    // AppSession 메뉴 체계:
+    // 1=주문생성(pid, qty, deadline), 3=주문확정(order_id),
+    // 6=생산시작(order_id), 7=출하(order_id), 0=종료
     std::string input =
-        "1\n" + std::to_string(pid) + "\n100\n2099-12-31\n"
-        "0\n";
+        "1\n" + std::to_string(pid) + "\n100\n2099-12-31\n"   // 주문 생성
+        "3\n1\n"                                               // 주문 확정 (id=1)
+        "6\n1\n"                                               // 생산 시작
+        "7\n1\n"                                               // 출하
+        "0\n";                                                  // 종료
 
-    RunSession(input);
+    std::string out = RunSession(input);
 
+    // 출하까지 성공 메시지 포함
+    EXPECT_NE(out.find(u8"성공"), std::string::npos)
+        << "output should contain success messages. actual:\n" << out;
+
+    // 최종 상태: RELEASE
     auto all = order_repo_.FindAll();
     ASSERT_EQ(all.size(), 1u);
-
-    int order_id = all[0].id;
-
-    // 확정(ConfirmOrder) → 생산시작(StartProduction) → 출하(Release) 는
-    // AppSession 이 구현된 후 세션 입력으로 전달할 예정.
-    // RED 단계에서는 주문이 생성되어 RESERVED 상태임을 확인한다.
-    EXPECT_EQ(all[0].status, models::OrderStatus::RESERVED);
-    EXPECT_GT(order_id, 0);
+    EXPECT_EQ(all[0].status, models::OrderStatus::RELEASE)
+        << "order should reach RELEASE status through AppSession";
 }
 
 // TC-04: 유효하지 않은 메뉴 번호(99) 입력 후 0 으로 종료 → 오류 메시지 포함

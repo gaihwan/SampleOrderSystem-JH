@@ -47,16 +47,8 @@ inline void OrderController::HandleInput() {
         output_ << u8"입력 오류.\n";
         return;
     }
-    switch (menu) {
-        case 1: HandleCreateOrder();     break;
-        case 2: HandleConfirmOrder();    break;
-        case 3: HandleRejectOrder();     break;
-        case 4: HandleCancelOrder();     break;
-        case 5: HandleStartProduction(); break;
-        case 6: HandleRelease();         break;
-        case 0: return;
-        default: output_ << u8"잘못된 메뉴입니다.\n"; break;
-    }
+    if (menu == 0) return;
+    HandleInput(menu);
 }
 
 inline void OrderController::HandleCreateOrder() {
