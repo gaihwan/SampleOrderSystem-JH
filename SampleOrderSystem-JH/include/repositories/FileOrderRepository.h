@@ -24,8 +24,8 @@ private:
     std::string file_path_;
     int         next_id_ = 1;
 
-    void                       SaveToFile(const std::vector<models::Order>& orders) const;
-    std::vector<models::Order> LoadFromFile() const;
+    void                       SaveToFile(const std::vector<models::Order>& orders) const noexcept;
+    std::vector<models::Order> LoadFromFile() const noexcept;
     static std::string         OrderToJson(const models::Order& order);
     static models::Order       JsonToOrder(const std::string& json_line);
     static std::string         StatusToString(models::OrderStatus status);
@@ -71,15 +71,16 @@ inline models::Order FileOrderRepository::JsonToOrder(const std::string& line) {
     auto extractStr = [&](const std::string& key) -> std::string {
         auto pos = line.find("\"" + key + "\":\"");
         if (pos == std::string::npos) return "";
-        pos += key.size() + 4;
+        pos += key.size() + 4;  // skip: "(1) + key + "(1) + :(1) + "(1) = key.size()+4
         auto end = line.find("\"", pos);
         return line.substr(pos, end - pos);
     };
     auto extractNum = [&](const std::string& key) -> std::string {
         auto pos = line.find("\"" + key + "\":");
         if (pos == std::string::npos) return "0";
-        pos += key.size() + 3;
+        pos += key.size() + 3;  // skip: "(1) + key + "(1) + :(1) = key.size()+3
         auto end = line.find_first_of(",}", pos);
+        if (end == std::string::npos) end = line.size();  // npos 가드: 마지막 필드 UB 방지
         return line.substr(pos, end - pos);
     };
 
@@ -95,14 +96,15 @@ inline models::Order FileOrderRepository::JsonToOrder(const std::string& line) {
     return o;
 }
 
-inline void FileOrderRepository::SaveToFile(const std::vector<models::Order>& orders) const {
+inline void FileOrderRepository::SaveToFile(const std::vector<models::Order>& orders) const noexcept {
     std::ofstream ofs(file_path_, std::ios::trunc);
+    if (!ofs.is_open()) return;  // 열기 실패 시 조용히 반환
     for (const auto& o : orders) {
         ofs << OrderToJson(o) << "\n";
     }
 }
 
-inline std::vector<models::Order> FileOrderRepository::LoadFromFile() const {
+inline std::vector<models::Order> FileOrderRepository::LoadFromFile() const noexcept {
     std::vector<models::Order> result;
     std::ifstream ifs(file_path_);
     if (!ifs.is_open()) return result;

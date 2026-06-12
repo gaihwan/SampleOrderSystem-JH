@@ -26,7 +26,7 @@ protected:
 // TC-01: Save 후 FindAll size == 1
 TEST_F(FileOrderRepositoryTest, Save_WritesJsonFile) {
     repositories::FileOrderRepository repo(test_file_);
-    repo.Save(MakeOrder());
+    (void)repo.Save(MakeOrder());
 
     auto all = repo.FindAll();
     EXPECT_EQ(all.size(), 1u);
@@ -77,7 +77,7 @@ TEST_F(FileOrderRepositoryTest, Update_OverwritesExistingEntry) {
 
 // TC-05: 파일 미존재 시 빈 벡터 반환 (예외 없음)
 TEST_F(FileOrderRepositoryTest, HandlesEmptyFile_GracefullyReturnsEmpty) {
-    repositories::FileOrderRepository repo("nonexistent_file_xyz.json");
+    repositories::FileOrderRepository repo(test_file_);  // TearDown에서 자동 정리
     auto all = repo.FindAll();
     EXPECT_EQ(all.size(), 0u);
 }
