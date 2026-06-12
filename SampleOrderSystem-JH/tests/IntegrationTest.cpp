@@ -128,7 +128,7 @@ TEST_F(IntegrationTest, FifoProduction_ConfirmedFirstIsProducedFirst) {
     auto start1 = prod_svc.StartProduction(r1.order_id);
     EXPECT_TRUE(start1.success);
 
-    // r1이 PRODUCING으로 전환된 후 r2가 최소 id CONFIRMED -> StartProduction 성공
+    // r1 PRODUCING 전환 후 CONFIRMED 목록에서 r2가 최솟값 id -> StartProduction 성공
     auto start2 = prod_svc.StartProduction(r2.order_id);
     EXPECT_TRUE(start2.success);
 }
