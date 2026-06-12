@@ -1,7 +1,7 @@
 # SampleOrderSystem — TDD Agent 팀
 
 SampleOrderSystem을 TDD 방식으로 개발하기 위한 Claude Agent 팀 구성입니다.  
-모든 에이전트는 `doc/COMMIT_CONVENTION.md`와 `.claude/agents/skills/SKILL.md`에 정의된 TDD 원칙을 준수합니다.
+모든 에이전트는 `doc/COMMIT_CONVENTION.md`와 `.claude/skills/test-driven-development/SKILL.md`에 정의된 TDD 원칙을 준수합니다.
 
 ---
 
@@ -118,6 +118,6 @@ RED/GREEN 전문가는 다음 경우 도메인 전문가에게 **설계 자문**
 
 ## 관련 문서
 
-- TDD 스킬 정의: `.claude/agents/skills/SKILL.md`
+- TDD 스킬 정의: `.claude/skills/test-driven-development/SKILL.md`
 - 커밋 컨벤션: `doc/COMMIT_CONVENTION.md`
 - 프로젝트 CLAUDE 규칙: `CLAUDE.md`

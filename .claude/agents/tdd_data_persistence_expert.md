@@ -247,4 +247,4 @@ TEST(FileOrderRepositoryTest, PersistsOrderAcrossInstances) {
 - PoC 저장소 (저장소): https://github.com/gaihwan/DataPersistence-JH
 - PoC 저장소 (모니터링): https://github.com/gaihwan/DataMonitoring-JH
 - Orchestrator 지침: `.claude/agents/tdd_orchestrator.md`
-- TDD 스킬: `.claude/agents/skills/SKILL.md`
+- TDD 스킬: `.claude/skills/test-driven-development/SKILL.md`

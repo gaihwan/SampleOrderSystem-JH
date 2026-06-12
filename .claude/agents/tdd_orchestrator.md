@@ -105,6 +105,6 @@ SampleOrderSystem의 전체 TDD 개발 흐름을 총괄한다.
 
 ## 참조
 
-- TDD 스킬: `.claude/agents/skills/SKILL.md`
+- TDD 스킬: `.claude/skills/test-driven-development/SKILL.md`
 - 커밋 컨벤션: `doc/COMMIT_CONVENTION.md`
 - 프로젝트 README: `.claude/agents/README.md`

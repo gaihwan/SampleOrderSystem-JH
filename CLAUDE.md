@@ -41,7 +41,7 @@ RED (실패 테스트 작성) → GREEN (최소 구현) → REFACTOR (정리)
 - 테스트를 통과시킬 최소한의 코드만 작성한다
 - 예외 없음. 사용자의 명시적 허락 없이는 TDD를 건너뛰지 않는다
 
-> 상세 TDD 규칙: `.claude/agents/skills/SKILL.md`
+> 상세 TDD 규칙: `.claude/skills/test-driven-development/SKILL.md`
 
 ---
 
@@ -130,6 +130,7 @@ SampleOrderSystem-JH/
         ├── tdd_console_mvc_expert.md
         ├── tdd_data_persistence_expert.md
         ├── tdd_dummy_data_generator_expert.md
-        └── skills/
+    └── skills/
+        └── test-driven-development/
             └── SKILL.md               ← TDD 스킬 정의
 ```

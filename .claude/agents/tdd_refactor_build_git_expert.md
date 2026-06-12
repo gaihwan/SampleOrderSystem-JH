@@ -203,5 +203,5 @@ master
 ## 참조
 
 - 커밋 컨벤션: `doc/COMMIT_CONVENTION.md`
-- TDD 스킬: `.claude/agents/skills/SKILL.md`
+- TDD 스킬: `.claude/skills/test-driven-development/SKILL.md`
 - Orchestrator 지침: `.claude/agents/tdd_orchestrator.md`

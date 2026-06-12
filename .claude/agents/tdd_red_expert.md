@@ -158,5 +158,5 @@ Orchestrator에게 보고 전 모두 확인:
 
 ## 참조
 
-- TDD 스킬 전문 규칙: `.claude/agents/skills/SKILL.md`
+- TDD 스킬 전문 규칙: `.claude/skills/test-driven-development/SKILL.md`
 - Orchestrator 지침: `.claude/agents/tdd_orchestrator.md`

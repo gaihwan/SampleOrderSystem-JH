@@ -207,4 +207,4 @@ TEST(OrderControllerTest, CreatesOrderFromUserInput) {
 
 - PoC 저장소: https://github.com/gaihwan/ConsoleMVC-JH
 - Orchestrator 지침: `.claude/agents/tdd_orchestrator.md`
-- TDD 스킬: `.claude/agents/skills/SKILL.md`
+- TDD 스킬: `.claude/skills/test-driven-development/SKILL.md`
