@@ -138,11 +138,14 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="tests\BatchCalculatorTest.cpp" />
     <ClCompile Include="tests\DomainModelTest.cpp" />
+    <ClCompile Include="tests\InMemoryOrderRepositoryTest.cpp" />
     <ClCompile Include="tests\OrderValidatorTest.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\models\Order.h" />
     <ClInclude Include="include\models\Product.h" />
+    <ClInclude Include="include\repositories\IOrderRepository.h" />
+    <ClInclude Include="include\repositories\InMemoryOrderRepository.h" />
     <ClInclude Include="include\utils\BatchCalculator.h" />
     <ClInclude Include="include\utils\OrderValidator.h" />
   </ItemGroup>
