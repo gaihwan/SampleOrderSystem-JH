@@ -361,3 +361,6 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+
+# PDF 문서 (과제/참고자료 등 커밋 제외)
+doc/*.pdf
