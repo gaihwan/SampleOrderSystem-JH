@@ -141,6 +141,7 @@
     <ClCompile Include="tests\InMemoryOrderRepositoryTest.cpp" />
     <ClCompile Include="tests\InMemoryProductRepositoryTest.cpp" />
     <ClCompile Include="tests\OrderValidatorTest.cpp" />
+    <ClCompile Include="tests\OrderServiceCreateTest.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\models\Order.h" />
@@ -151,6 +152,7 @@
     <ClInclude Include="include\repositories\InMemoryProductRepository.h" />
     <ClInclude Include="include\utils\BatchCalculator.h" />
     <ClInclude Include="include\utils\OrderValidator.h" />
+    <ClInclude Include="include\services\OrderService.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
